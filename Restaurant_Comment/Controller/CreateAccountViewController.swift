@@ -97,18 +97,30 @@ class CreateAccountViewController: UIViewController {
     
     
     @IBAction func creatAccount(){
-        if emailTextField.text != "" && passwordTextField.text != ""{
-            Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { authResult, error in
-                if let error = error{
-                    print(error.localizedDescription)
-                }
-                if let authResult = authResult{
-                    let user = authResult.user
-                    print("\(String(describing: user.email!)) is created" )
-                    self.saveUserData()
+        if emailTextField.text != "" && passwordTextField.text != "" && nameTextField.text != "" && confirmTextField.text != ""{
+            if passwordTextField.text == confirmTextField.text{
+                Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { authResult, error in
+                    if let error = error{
+                        print(error.localizedDescription)
+                    }
+                    if let authResult = authResult{
+                        let user = authResult.user
+                        print("\(String(describing: user.email!)) is created" )
+                        self.saveUserData()
 
+                    }
                 }
+            }else{
+                let alertController = UIAlertController(title: "提醒", message: "密碼不一樣，請確認", preferredStyle: .alert)
+                let okActioin = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okActioin)
             }
+        }else{
+            let alertController = UIAlertController(title: "提醒", message: "請輸入所有資料", preferredStyle: .alert)
+            let okActioin = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okActioin)
+            present(alertController, animated: true, completion: nil)
+
         }
 
     }

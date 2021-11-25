@@ -30,6 +30,11 @@ class LoginViewController: UIViewController {
             Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { authResult, error in
                 if let error = error {
                     print(error.localizedDescription)
+                    let alertController = UIAlertController(title: "提醒", message: "帳號或密碼錯誤", preferredStyle: .alert)
+                    let okActioin = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alertController.addAction(okActioin)
+                    self.present(alertController, animated: true, completion: nil)
+
                 }
                 if let authResult = authResult{
                     let user = authResult.user

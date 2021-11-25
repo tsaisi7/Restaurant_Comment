@@ -165,6 +165,10 @@ class AddRestaurantViewController: UITableViewController {
             }
         }else{
             print("ERROR")
+            let alertController = UIAlertController(title: "提醒", message: "請輸入所有資料", preferredStyle: .alert)
+            let okActioin = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okActioin)
+            present(alertController, animated: true, completion: nil)
         }
     }
 }
