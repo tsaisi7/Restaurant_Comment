@@ -27,18 +27,15 @@ class CreateAccountViewController: UIViewController {
             createAccountButton.layer.cornerRadius = 8
         }
     }
-
+    //IBOutlet 連接 storyboard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     let ref = Firestore.firestore().collection("Users")
     var storageRef = Storage.storage().reference()
 
-    
-    
     func saveUserData(){
         let userID = Auth.auth().currentUser!.uid
         storageRef = storageRef.child("Users").child(userID).child("\(UUID().uuidString).jpeg")
@@ -69,8 +66,9 @@ class CreateAccountViewController: UIViewController {
                 }
             }
         }
-
     }
+    
+    // 儲存 User 資訊，利用 FirebaseStorage 先儲存照片，並取得download URL ，再利用 FirebaseCore 儲存資料
     
     @IBAction func chooseImage(){
         let controller = UIAlertController(title: "選取照片", message: "", preferredStyle: .actionSheet)
@@ -93,7 +91,7 @@ class CreateAccountViewController: UIViewController {
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
     }
-    
+    // IBAction 連接 storyboard ，利用 UIAlertController 顯現選單，讓使用者選擇 UIImagePickerController's sourceType 是 .photoLibrary or .camera
     
     
     @IBAction func creatAccount(){
@@ -107,13 +105,13 @@ class CreateAccountViewController: UIViewController {
                         let user = authResult.user
                         print("\(String(describing: user.email!)) is created" )
                         self.saveUserData()
-
                     }
                 }
             }else{
                 let alertController = UIAlertController(title: "提醒", message: "密碼不一樣，請確認", preferredStyle: .alert)
                 let okActioin = UIAlertAction(title: "OK", style: .default, handler: nil)
                 alertController.addAction(okActioin)
+                present(alertController, animated: true, completion: nil)
             }
         }else{
             let alertController = UIAlertController(title: "提醒", message: "請輸入所有資料", preferredStyle: .alert)
@@ -122,12 +120,13 @@ class CreateAccountViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
 
         }
-
     }
+    // IBAction 連接 storyboard ，利用FirebaseAuth 建立 User ，當成功建立後呼叫 saveUserDate() 儲存使用者資料
 }
 extension CreateAccountViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         userImageView.image = (info[.originalImage] as! UIImage)
         dismiss(animated: true, completion: nil)
     }
+    //為 UIImagePickerController 中的方法，完成選取的照片後，將照片放入 userImageView裡面
 }

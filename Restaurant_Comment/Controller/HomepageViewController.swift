@@ -21,10 +21,13 @@ class HomepageViewController: UIViewController {
     }
     @IBOutlet var userNameButton: UIButton!
     
-//    var restaurants:[Restaurant] = [Restaurant(id: "01", name: "左岸咖啡", image: "cafelore", location: "台北市大安區基隆路四段43號", date: "2021/11/11", type: "咖啡館",description: "很棒的餐廳、很好、一級棒", score: "4.6")]
+    // IBOutlet 連接 storyboard
+    
     var restaurants: [Restaurant] = []
     var restaurantScore = 0.0
     var user: User!
+    var searchController: UISearchController!
+    var searchArray: [Restaurant] = []
     enum score: String {
         case five
         case four
@@ -49,6 +52,8 @@ class HomepageViewController: UIViewController {
             }
         }
     }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let image = UIImage()
@@ -57,8 +62,31 @@ class HomepageViewController: UIViewController {
         readData()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "餐廳查詢"
+        searchController.searchBar.backgroundImage = UIImage()
+        searchController.searchBar.tintColor = UIColor(red: 255/255, green: 180/255, blue: 75/255, alpha: 1.0)
+        self.navigationItem.searchController = searchController
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.refreshControl?.attributedTitle = NSAttributedString(string: "更新中")
+    }
+    
+    @objc func handleRefresh(){
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
+    }
+    
     let ref = Firestore.firestore().collection("Users").document(Auth.auth().currentUser!.uid)
     
     func readData(){
@@ -135,21 +163,47 @@ class HomepageViewController: UIViewController {
 extension HomepageViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return restaurants.count
+        return searchController.isActive ? searchArray.count : restaurants.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "restaurantCell", for: indexPath) as! RestaurantTableViewCell
-        cell.nameLabel.text = restaurants[indexPath.row].name
-        cell.locationLabel.text = restaurants[indexPath.row].location
-        cell.dateLabel.text = restaurants[indexPath.row].date
-        cell.typeLabel.text = restaurants[indexPath.row].type
-        cell.scoreLabel.text = restaurants[indexPath.row].score
-        AF.request(self.restaurants[indexPath.row].image).responseImage { response in
-            if case .success(let image) = response.result {
-                cell.restaurantImageView.image = image
+        
+        if searchController.isActive {
+            cell.nameLabel.text = searchArray[indexPath.row].name
+            cell.locationLabel.text = searchArray[indexPath.row].location
+            cell.dateLabel.text = searchArray[indexPath.row].date
+            cell.typeLabel.text = searchArray[indexPath.row].type
+            cell.scoreLabel.text = searchArray[indexPath.row].score
+            AF.request(self.searchArray[indexPath.row].image).responseImage { response in
+                if case .success(let image) = response.result {
+                    cell.restaurantImageView.image = image
+                }
+            }
+        } else{
+            cell.nameLabel.text = restaurants[indexPath.row].name
+            cell.locationLabel.text = restaurants[indexPath.row].location
+            cell.dateLabel.text = restaurants[indexPath.row].date
+            cell.typeLabel.text = restaurants[indexPath.row].type
+            cell.scoreLabel.text = restaurants[indexPath.row].score
+            AF.request(self.restaurants[indexPath.row].image).responseImage { response in
+                if case .success(let image) = response.result {
+                    cell.restaurantImageView.image = image
+                }
             }
         }
+
         return cell
+    }
+}
+extension HomepageViewController: UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else{
+            return
+        }
+        searchArray = restaurants.filter { (Restaurant) -> Bool in
+            return Restaurant.name.localizedCaseInsensitiveContains(searchText)
+        }
+        tableView.reloadData()
     }
 }

@@ -18,11 +18,10 @@ class LoginViewController: UIViewController {
             loginButton.layer.cornerRadius = 8
         }
     }
+    // IBOutlet 連接 storyboard
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func login(){
@@ -47,6 +46,6 @@ class LoginViewController: UIViewController {
         }
 
     }
-
+    // User 登入，利用FirebaseAuth 的 signIn()方法登入
 
 }

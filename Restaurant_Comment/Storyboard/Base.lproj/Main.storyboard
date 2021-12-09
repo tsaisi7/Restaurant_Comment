@@ -704,14 +704,14 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="903-Bk-59T">
-                                            <rect key="frame" x="20" y="0.0" width="60" height="60"/>
+                                            <rect key="frame" x="8" y="0.0" width="60" height="60"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="Ig0-c4-uTv"/>
                                                 <constraint firstAttribute="height" constant="60" id="fPa-2i-IgA"/>
                                             </constraints>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BhS-m1-Ssz">
-                                            <rect key="frame" x="88" y="12" width="82" height="36"/>
+                                            <rect key="frame" x="76" y="12" width="82" height="36"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                             <state key="normal" title="帳戶名稱">
                                                 <color key="titleColor" systemColor="labelColor"/>
@@ -723,11 +723,10 @@
                                     </subviews>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="903-Bk-59T" secondAttribute="bottom" id="4DK-xz-gdy"/>
-                                        <constraint firstItem="903-Bk-59T" firstAttribute="top" secondItem="veV-0u-Nmd" secondAttribute="top" id="IjN-kK-Zzj"/>
-                                        <constraint firstItem="903-Bk-59T" firstAttribute="leading" secondItem="veV-0u-Nmd" secondAttribute="leading" constant="20" id="Q1a-VP-BQR"/>
-                                        <constraint firstItem="BhS-m1-Ssz" firstAttribute="centerY" secondItem="veV-0u-Nmd" secondAttribute="centerY" id="sHm-0B-6Qo"/>
-                                        <constraint firstItem="BhS-m1-Ssz" firstAttribute="leading" secondItem="903-Bk-59T" secondAttribute="trailing" constant="8" symbolic="YES" id="vBP-2M-0wH"/>
+                                        <constraint firstItem="903-Bk-59T" firstAttribute="top" secondItem="veV-0u-Nmd" secondAttribute="top" id="1Ig-wc-bdV"/>
+                                        <constraint firstItem="903-Bk-59T" firstAttribute="leading" secondItem="veV-0u-Nmd" secondAttribute="leadingMargin" id="ZwA-1y-cAi"/>
+                                        <constraint firstItem="BhS-m1-Ssz" firstAttribute="centerY" secondItem="903-Bk-59T" secondAttribute="centerY" id="hdG-7y-h6T"/>
+                                        <constraint firstItem="BhS-m1-Ssz" firstAttribute="leading" secondItem="903-Bk-59T" secondAttribute="trailing" constant="8" symbolic="YES" id="pXl-1W-JXy"/>
                                     </constraints>
                                 </view>
                                 <prototypes>
